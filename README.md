@@ -1,5 +1,5 @@
-Python Library
-==============
+Private Python Library for Astrophysics
+=======================================
 
 img2data.py
 -----------
