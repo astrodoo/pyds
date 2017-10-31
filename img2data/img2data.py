@@ -1,3 +1,4 @@
+"""
 #!/usr/bin/env python
 # filename: 
 #     img2data.py
@@ -10,15 +11,15 @@
 # Routines:
 #     readimg: read the image data
 #        args
-#           imgplot: imgplot=ax.imshow(image)
-#           ax     : axis
-#           w      : (optional) widget for showing the position and value interactively
+#           imgplot: 2D image (e.g., imgplot=ax.imshow(image))
+#           ax     : axis of the plot
 #        keywords  :
+#           wflag  : if given, widget will show the information interactively (boolean; default= True)
 #           xlim/ylim: range of the xaxis/yaxis -> type: list array [min, max]
 #           xlog/ylog: if given, the scale is considered as logarithmic scale --> type: boolean
+#           noline : if given, line will not be shown after clicking the data point (booine; default= False)
 #        Return variables
 #           self.xdata/self.ydata: the data coordinate chosen by mouse clikc
-#       
 # 
 # Written by:
 #     Doosoo Yoon
@@ -27,23 +28,35 @@
 # History:
 #     Written, 30 March 2017
 ###############################################################
+"""
 import ipywidgets as widgets
 from IPython.display import display
 import numpy as np
 
 class readimg:
+    """
+     readimg: read the image data
+        args
+           imgplot: 2D image (e.g., imgplot=ax.imshow(image))
+           ax     : axis of the plot
+        keywords  :
+           wflag  : if given, widget will show the information interactively (boolean; default= True)
+           xlim/ylim: range of the xaxis/yaxis corresponidng to the point you select with first four clicks-> ([min, max])
+           xlog/ylog: if given, the scale is considered as logarithmic scale --> (boolean; default= False)
+        Return variables
+           self.xdata/self.ydata: the data coordinate chosen by mouse click
+    """
+
     def __init__(self, *args, **keywords):
         
         self.wflag = True
         if len(args) == 2:    
             self.imgplot = args[0]; self.ax = args[1]
-            self.wflag = False
-        elif len(args) == 3:
-            self.imgplot = args[0]; self.ax = args[1]
-            self.w = args[2]
         else:
-            print 'Number of Args should be 2 or 3.'
+            print 'Number of Args should be 2.'
             return None  
+
+        self.w = widgets.HTML()
         
         if 'xlim' in keywords.keys():
             self.xlim = keywords['xlim']
@@ -64,6 +77,14 @@ class readimg:
             self.ylog = keywords['ylog']
         else:
             self.ylog = False
+        if 'wflag' in keywords.keys():
+            self.wflag = keywords['wflag']
+        else:
+            self.wflag = True
+        if 'noline' in keywords.keys():
+            self.noline = keywords['noline']
+        else:
+            self.noline = False
             
         self.x0 = []; self.y0 = []
         self.xx = []; self.yy = []
@@ -71,7 +92,6 @@ class readimg:
         self.ind = 0
         self.cid = self.imgplot.figure.canvas.mpl_connect('button_press_event', self)
         if self.wflag: display(self.w)
-    
 
     def __call__(self, event):
         if self.wflag:
@@ -87,26 +107,29 @@ class readimg:
             if self.wflag:
                 self.w.value = 'xdata=%f, ydata=%f'%(event.xdata, event.ydata)
         else:
-            self.ax.axhline(y=event.ydata)
-            self.ax.axvline(x=event.xdata)
+            if not(self.noline):
+                self.ax.axhline(y=event.ydata, linewidth=1)
+                self.ax.axvline(x=event.xdata, linewidth=1)
+
             self.xx.append(event.xdata); self.yy.append(event.ydata)
             
             if self.xlog:
                 xinplt = self.calcdataxlg(event.xdata)
             else:
                 xinplt = self.calcdatax(event.xdata)
+
             self.xdata.append(xinplt)
             
             if self.ylog:
                 yinplt = self.calcdataylg(event.ydata)
             else:
                 yinplt = self.calcdatay(event.ydata)
+
             self.ydata.append(yinplt)
             
             if self.wflag:
-                self.w.value = 'xpixel=%f, ypixel=%f ,xdata=%f, ydata=%f'%(event.xdata, event.ydata, xinplt, yinplt)
+                self.w.value = 'xpixel=%f, ypixel=%f ,xdata=%e, ydata=%e'%(event.xdata, event.ydata, xinplt, yinplt)
 
-            
         self.ind = self.ind + 1
         
     # Calculate Data position in the plot coordinate
