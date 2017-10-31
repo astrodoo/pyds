@@ -7,7 +7,7 @@ img2data
 
 astrounit
 -----------
-* PURPOSE: briefly allocating the astrophysical constants to the module astropy.constants
+* PURPOSE: briefly reading the astrophysical constants in cgs units from the module astropy.constants
 
 
 See the folder 'ipynb' for the exercise
