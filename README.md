@@ -1,6 +1,8 @@
 Private Python Library for Astrophysics
 =======================================
 
+dependence: numpy, astropy
+
 img2data
 -----------
 * PURPOSE: Collect the data from plot in image files (png, jpg ...)
