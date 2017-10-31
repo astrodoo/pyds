@@ -1,4 +1,5 @@
 from astropy import constants as cons
+from astropy import units
 
 consmatch = {'g'      : 'G',       \
              'lsun'   : 'L_sun',   \
@@ -18,14 +19,22 @@ consmatch = {'g'      : 'G',       \
              'sigmaT' : 'sigma_T', \
              'sigmaSB': 'sigma_sb'}
 
-lyr = cons.c.cgs.value *60.*60.*24.*365
+year = 60.*60.*24.*365.
+lyr = cons.c.cgs.value *year
+eV  = units.eV.to(units.erg)
+Jy = (1*units.Jy).cgs.value
+re  = 2.81794092e-13
 
 class astrounit:
 
     for key,val in consmatch.iteritems():
         exec('%s = cons.%s.cgs.value'%(key,val))
 
-    lyr = lyr
+    year = year
+    lyr  = lyr
+    eV   = eV
+    Jy   = Jy
+    re   = re
 
 
 def info():
@@ -38,6 +47,10 @@ def info():
 
     print '----------------------------------------------------------------------'
     print 'not in astropy:'
+    print '%8s \t %15s \t %e \t %s'%('year','not in astropy',year,'s' )
     print '%8s \t %15s \t %e \t %s'%('lyr','not in astropy',lyr,'cm' )
+    print '%8s \t %15s \t %e \t %s'%('eV','not in astropy',eV,'erg' )
+    print '%8s \t %15s \t %e \t %s'%('Jy','not in astropy',Jy,'erg / (cm2 s Hz)' )
+    print '%8s \t %15s \t %e \t %s'%('re','not in astropy',re,'cm' )
 
 
