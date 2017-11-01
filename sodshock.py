@@ -124,7 +124,8 @@ def sodshockSolve(d=[1.,0.125], p=[1.,0.1], v=[0.,0.], gamma=1.66667, \
     cs[reg5] = cs0[1]
     ee[reg5] = 1./(gamma-1.)*p[1]/d[1]
 
-    results = {'x':x,'p':pp,'d':dd,'v':vv,'cs':cs,'e':ee}
+    results = {'x':x,'p':pp,'d':dd,'v':vv,'cs':cs,'e':ee \
+            ,'xsh':xsh,'xcd':xcd,'xhead':xhead,'xtail':xtail,'vsh':vsh}
 
     return results
 
@@ -141,18 +142,24 @@ class sodshock:
                 time: the desired time to calcuate the profile (float; defaut = 0.245)
                 resol: the resolution of x-grid (int; default = 200)
 
-    output -- self.d / self.p / self.e / self.v / self.cs / self.x / self.time 
+    output -- self.d / self.p / self.e / self.v / self.cs / self.x / 
+              self.xtail / self.xhead / self.xsh / self.xcd / self.vsh
     """
     def __init__(self,d=[1.,0.125], p=[1.,0.1], v=[0.,0.], gamma=1.66667, \
             time=0.245, resol=200, xscale=[0.,1.]):
 
         results = sodshockSolve(d=d,p=p,v=v,gamma=gamma,time=time,resol=resol,xscale=xscale)
 
-        self.x = results['x']
-        self.d = results['d']
-        self.p = results['p']
-        self.v = results['v']
-        self.e = results['e']
-        self.cs = results['cs']
-        self.time = time
+        self.x     = results['x']
+        self.d     = results['d']
+        self.p     = results['p']
+        self.v     = results['v']
+        self.e     = results['e']
+        self.cs    = results['cs']
+        self.xsh   = results['xsh']
+        self.xcd   = results['xcd']
+        self.xhead = results['xhead']
+        self.xtail = results['xtail']
+        self.vsh   = results['vsh']
+        self.time  = time 
 
