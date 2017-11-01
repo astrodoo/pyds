@@ -11,6 +11,7 @@ consmatch = {'g'      : 'G',       \
              'h'      : 'h',       \
              'kb'     : 'k_B',     \
              'pc'     : 'pc',      \
+             'kpc'    : 'kpc',     \
              'me'     : 'm_e',     \
              'mn'     : 'm_n',     \
              'mp'     : 'm_p',     \
@@ -26,7 +27,12 @@ Jy = (1*units.Jy).cgs.value
 re  = 2.81794092e-13
 
 class astrounit:
-
+    """
+    assign the astrophysical constants.
+    The available constants will be shown as follows:
+    >>> from pyds.astrounit import astrounit
+    >>> astrounit().info()
+    """
     for key,val in consmatch.iteritems():
         exec('%s = cons.%s.cgs.value'%(key,val))
 
@@ -35,6 +41,12 @@ class astrounit:
     eV   = eV
     Jy   = Jy
     re   = re
+
+    def info(self):
+
+        info()
+
+        return None
 
 
 def info():
@@ -52,5 +64,4 @@ def info():
     print '%8s \t %15s \t %e \t %s'%('eV','not in astropy',eV,'erg' )
     print '%8s \t %15s \t %e \t %s'%('Jy','not in astropy',Jy,'erg / (cm2 s Hz)' )
     print '%8s \t %15s \t %e \t %s'%('re','not in astropy',re,'cm' )
-
 
