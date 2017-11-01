@@ -13,4 +13,7 @@ astrounit
 -----------
 * PURPOSE: briefly reading the astrophysical constants in cgs units from the module astropy.constants
 
+sodshock
+-----------
+* PURPOSE: calculate the analytical values for the sod-shocktube problem in the adiabatic equation of states
 
