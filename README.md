@@ -9,9 +9,14 @@ img2data
 -----------
 * PURPOSE: Collect the data from plot in image files (png, jpg ...)
 
-astrounit
+astro
 -----------
-* PURPOSE: briefly reading the astrophysical constants in cgs units from the module astropy.constants
+cotains
+
+* astrounit
+    PURPOSE: briefly reading the astrophysical constants in cgs units from the module astropy.constants
+* astroeq
+    PURPOSE: compute formulae in astronomy
 
 sodshock
 -----------

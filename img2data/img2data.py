@@ -1,33 +1,31 @@
 """
-#!/usr/bin/env python
-# filename: 
-#     img2data.py
-# 
-# PURPOSE:
-#     Collect the data from plot in image files (png, jpg ...)
-#     ### Note that the magic function should be the type that allows interactive plotting
-#         such as '%matplotlib notebook'.
-#
-# Routines:
-#     readimg: read the image data
-#        args
-#           imgplot: 2D image (e.g., imgplot=ax.imshow(image))
-#           ax     : axis of the plot
-#        keywords  :
-#           wflag  : if given, widget will show the information interactively (boolean; default= True)
-#           xlim/ylim: range of the xaxis/yaxis -> type: list array [min, max]
-#           xlog/ylog: if given, the scale is considered as logarithmic scale --> type: boolean
-#           noline : if given, line will not be shown after clicking the data point (booine; default= False)
-#        Return variables
-#           self.xdata/self.ydata: the data coordinate chosen by mouse clikc
-# 
-# Written by:
-#     Doosoo Yoon
-#     Shanghai Astronomical Observatory
-#   
-# History:
-#     Written, 30 March 2017
-###############################################################
+filename: 
+     img2data.py
+ 
+PURPOSE:
+     Collect the data from plot in image files (png, jpg ...)
+     ### Note that the magic function should be the type that allows interactive plotting
+         such as '%matplotlib notebook'.
+
+Routines:
+     readimg: read the image data
+        args
+           imgplot: 2D image (e.g., imgplot=ax.imshow(image))
+           ax     : axis of the plot
+        keywords  :
+           wflag  : if given, widget will show the information interactively (boolean; default= True)
+           xlim/ylim: range of the xaxis/yaxis -> type: list array [min, max]
+           xlog/ylog: if given, the scale is considered as logarithmic scale --> type: boolean
+           noline : if given, line will not be shown after clicking the data point (booine; default= False)
+        Return variables
+           self.xdata/self.ydata: the data coordinate chosen by mouse clikc
+ 
+Written by:
+     Doosoo Yoon
+     Shanghai Astronomical Observatory
+   
+History:
+     Written, 30 March 2017
 """
 import ipywidgets as widgets
 from IPython.display import display
