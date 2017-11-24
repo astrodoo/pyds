@@ -69,7 +69,7 @@ def readcol(file,format=[],nskip=0):
             types[j] = 'np.float64'
             cols[i] = True
         elif (iformat == 's'):
-            types[j] = "'S25'"    # for longer string array
+            types[j] = "'S25'"    # for longer string array (no longer to be used)
             cols[i] = True
         elif (iformat =='x'):
             continue
@@ -77,28 +77,24 @@ def readcol(file,format=[],nskip=0):
             sys.exit('the allowed formats are i/f/s/x for integer,float,string and skip, respectively.')
 
         j += 1
-
+    
+    # separate data elements 
+    alldata = np.asarray([[data for data in line.split()] for line in text])
+    selectdata = np.squeeze(alldata[:,cols])
+        
     # col1,col2,col3, ...
     colarr = ['col'+str(i) for i in range(nvars)]
-    
-    # initialize the arrays
+        
     for i,icolarr in enumerate(colarr):
-        exec(icolarr+'=np.zeros('+nlines+',dtype='+types[i]+')')
-
-    for i,iline in enumerate(text):
-        colstrs_tot = np.asarray((iline.split()))
-        colstrs = np.asarray(colstrs_tot[cols])
-
-        for j,jcolarr in enumerate(colarr):
-            
-            if (types[j] == 'np.float64'):
-                exec(jcolarr+"[i]=np.float64(colstrs[j].lower().replace('d','e'))")
-            elif (types[j] == 'np.int32'):
+        if (types[i]=='np.float64'):
+            exec(icolarr+"= np.asarray([np.float64(num.lower().replace('d','e')) for num in selectdata[:,i]])")
     # In current version of python(2.7), nan cannot be managed in integer type (only work for float format). 
     # Instead, it will produce weird number (i.e. -91212141412412)
-                exec(jcolarr+"[i]=np.int32(np.float64(colstrs[j].lower().replace('d','e')))")
-            else:
-                exec(jcolarr+'[i]=np.str(colstrs[j])')
+        elif (types[i]=='np.int32'):
+            exec(icolarr+"= np.asarray([np.int32(np.float64(num.lower().replace('d','e'))) \
+                for num in selectdata[:,i]])")
+        else:
+            exec(icolarr+"=selectdata[:,i]")
                 
     colarrstr = ', '.join(colarr)
     return eval(colarrstr)
