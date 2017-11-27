@@ -43,3 +43,7 @@ contains
 * readcol
     
     PURPOSE: read the columns of interest with formats from ascii data
+
+* axpos
+
+    PURPOSE: set the multiplot configuration easily
