@@ -84,7 +84,7 @@ def rbondi(mbh=1.,cs=1.):
         mbh and cs(sound speed) should be in cgs unit
         returned value would be in cm unit.
 
-        kewords:
+        keywords:
             mbh: black hole mass in g unit
             cs: sound speed in cm/s unit
     """
@@ -96,7 +96,7 @@ def Mdotbondi(mbh=1.,rho=1.,cs=1.):
         mbh, rho, cs(sound speed) should be in cgs unit
         returned value would be in cm unit.
 
-        kewords:
+        keywords:
             mbh: black hole mass in g unit
             rho: density in g/cm3 unit
             cs: sound speed in cm/s unit
@@ -120,7 +120,7 @@ def Mdotedd(mbh,radeff=0.1):
 
         args:
             mbh: black hole mass in g unit
-        kewords:
+        keywords:
             radeff: radiative efficiency (default=0.1)
     """
     result = 4.*np.pi* unit.g * mbh*unit.mp/radeff/unit.sigmaT/unit.c
@@ -130,7 +130,7 @@ def Mjeans(T=0., rho=1., mmw=1.3):
     """ Jean's mass (assume the uniform density at the spherical shape) in g unit
         (eq.(5.26) in astropedia)
 
-        kewords:
+        keywords:
            T: temperature in K
            rho: density in g/cm3
            mmw: mean molecular weight (default=1.3 for neutral solar abundance)
@@ -144,7 +144,7 @@ def Ljeans(T=0., rho=1., mmw=1.3):
         Ljeans = 2 x Rjeans, where Rjeans = (Mjeans/ (4/3 pi rho))^(1/3)
         (using eq.(5.27) for Rjeans in astropedia)
 
-        kewords:
+        keywords:
            T: temperature in K
            rho: density in g/cm3
            mmw: mean molecular weight (default=1.3 for neutral solar abundance)
@@ -156,7 +156,7 @@ def tff(rho=1.):
     """ free-fall time scale (assume the uniform density at the spherical shape) in s unit
         (eq.(5.28) in astropedia)
 
-        kewords:
+        keywords:
             rho: density in g/cm3
     """
     result = np.sqrt(3.*np.pi/32./unit.g/rho)

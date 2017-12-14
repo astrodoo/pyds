@@ -31,7 +31,8 @@ class astrounit:
     assign the astrophysical constants.
     The available constants will be shown as follows:
     >>> from pyds.astrounit import astrounit
-    >>> astrounit().info()
+    >>> astrounit.info()
+    >>> astrounit.g
     """
     for key,val in consmatch.iteritems():
         exec('%s = cons.%s.cgs.value'%(key,val))
@@ -42,11 +43,13 @@ class astrounit:
     Jy   = Jy
     re   = re
 
-    def info(self):
+    @staticmethod
+    def info():
 
         info()
 
-        return None
+        pass
+
 
 
 def info():

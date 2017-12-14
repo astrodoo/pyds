@@ -33,7 +33,7 @@ class axpos:
                          If single number is given, all plots have same (x/y) size.
                          If list of numbers is given, the length of the list should be same with
                          (x/y) size.
-            pltxw/pltyw: gap between arrays
+            pltxw/pltyw: gap between plots
 
             ### Note that all values will be scaled out. Hence, the exact values are meaningless,
             but the ratios between the variables are matter. ###
@@ -90,17 +90,19 @@ class axpos:
         col    = int(numpltstr[1])
         posplt = int(numpltstr[2])
         
-        posrow = row - 1 - int((posplt-1) // col)
+        # row position: increasing index for lower panels
+        posrow = int((posplt-1) // col)
+        # colum position: increasing index for right panels
         poscol = int(np.mod((posplt-1),col))
         
         if (row*col < posplt):
             sys.exit('plot number is out of range.')
         
-        left = (self.pltx0[0]+self.pltxw*poscol+np.sum(self.pltxs[:poscol]))/self.winxs
-        width = (self.pltxs[poscol])/self.winxs 
-        bottom = (self.plty0[0]+self.pltyw*posrow+np.sum(self.pltys[:posrow]))/self.winys
+        left   = (self.pltx0[0]+self.pltxw*poscol+np.sum(self.pltxs[:poscol]))/self.winxs
+        width  = (self.pltxs[poscol])/self.winxs 
+        bottom = (self.plty0[0]+self.pltyw*(row-1-posrow)+np.sum(self.pltys[posrow+1:]))/self.winys
         height = (self.pltys[posrow])/self.winys
-        
+
         return [left,bottom,width,height]
 
     def subplots_adjust(self, fig):
