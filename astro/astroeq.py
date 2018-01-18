@@ -5,18 +5,6 @@ filename:
 PURPOSE:
     collection of formulae in astronomy
 
-Routines:
-    cs(gamma=5./3., **keywords): sound speed 
-    vkep(pointmass,r=1.): Keplerian velocity in the gravitional potential due to point mass
-    rsh(mbh): Schwarschild radius
-    rbondi(mbh=1.,cs=1.): Bondi radius
-    Mdotbondi(mbh=1.,rho=1.cs=1.): Bondi accretion rate
-    Ledd(mbh): Eddington Luminosity
-    Mdotedd(mbh,radeff=0.1): Eddington BH mass accretion rate
-    Mjeans(T=0., rho=1., mmw=1.3): Jean's Mass
-    Ljeans(T=0., rho=1., mmw=1.3): Jean's length
-    tff(rho=1.): free-fall time scale
-
 Written by:
     Doosoo Yoon
     Shanghai Astronomical Observatory
