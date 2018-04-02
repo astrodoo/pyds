@@ -101,8 +101,8 @@ class cosmonom:
     outputs   -- self.zext: extremum value of z
                  self.age0: self.age_z(0.)
     functions -- self.Hz: H(z)    <->  self.zH: z(H)
-                 self.rz: r(z)    <->   self.zr: z(r)   - comoving radius
-                 self.dmz: dm(z)  <-> self.zdm: z(dm)
+                 self.rz: r(z)    <->  self.zr: z(r)   - comoving radius
+                 self.dmz: dm(z)  <->  self.zdm: z(dm)
                  self.size_z: 1" size(z) in kpc <->  self.zSize1, self.zSize2 - z(size) for z<zext, z>zext, respectively.
                  self.angle_z: 1 kpc angle(z) <-> self.zAngle1, self.zAngle2 - z(angle) for z<zext, z>zext, respectively.
                  self.age_z: age(z)  <-> self.zage: z(age)
