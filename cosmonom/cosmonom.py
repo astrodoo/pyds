@@ -172,7 +172,7 @@ class cosmonom:
         print 'z_extremum: %f'%self.zext
         print 'size(zext): %f, angle(zext): %f'%(self.size_z(self.zext),self.angle_z(self.zext))
 
-	ParamStr = 'H0=%5.2f, OLambda=%5.3f, Om=%5.3f'%(self.H0,self.OL,self.Om)
+	ParamStr = r'$H_{0}$=%5.2f, $\Omega_{\Lambda}$=%5.3f, $\Omega_{M}$=%5.3f'%(self.H0,self.OL,self.Om)
 
         # Setup a plot such that only the bottom spine is shown
 	def setup(ax):
