@@ -165,6 +165,8 @@ class cosmonom:
 	Draw the scaled axes for the cosmological variables
 
 	**keywords -- out: if given, the plot will be saved to the designated output file (type = string) 
+                        z: if given, it will draw the horizontal line for the value of z so that it 
+                           helps catching the corresponding variables. (type = float)
 	"""
 	import matplotlib.pyplot as plt
 	import matplotlib.ticker as ticker
@@ -181,9 +183,9 @@ class cosmonom:
     	    ax.xaxis.set_major_locator(ticker.NullLocator())
     	    ax.spines['left'].set_color('none')
     	    ax.yaxis.set_ticks_position('right')
+    	    ax.tick_params(axis='y',which='major',length=10,direction='inout')
     	    ax.tick_params(axis='y',which='minor',right='off')
 
-    
         #figure setting
         x0 = [30.,50.]; y0 = [20.,70.]
         ys = 500.
@@ -313,6 +315,12 @@ class cosmonom:
         ax9.yaxis.set_major_locator(ticker.FixedLocator(ticklocz))
         ax9.yaxis.set_major_formatter(ticker.FixedFormatter(ticklabz_str))
         ax9.annotate('z',(1.,1.02),xycoords='axes fraction',ha='center')	
+
+
+        if 'z' in keywords.keys():
+            zz = keywords['z']
+            ax9.annotate("", xy=(1,zz),xytext=(-79.,zz),xycoords='data',textcoords='data' \
+                ,arrowprops=dict(arrowstyle="-",connectionstyle="arc3,rad=0.",color='magenta'))
 
 	# save the image
         if 'out' in keywords.keys():
