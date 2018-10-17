@@ -1,115 +1,25 @@
 """
 filename: 
-     cosmonom.py
+    waveunitconvert.py
  
 PURPOSE:
-     Calculate cosmological variables under the given parameters:
-     Hubble constant(H0), Omega_Lambda, Omega_m
-
-     All equations and coding were referred to Paper-and-pencil cosmological calculator in Pilipenko (2013):
-     http://adsabs.harvard.edu/abs/2013arXiv1303.5961P
+    convert unit of waves between wavelength, frequency, energy and temperature
 
 Written by:
      Doosoo Yoon
-     Shanghai Astronomical Observatory
+     University of Amsterdam
    
 History:
      Written, 2 April 2018
 """
 import numpy as np
 
-def solve(f,val,a0,b0,eps):
-    a = a0
-    b = b0
-    epsilon = b - a
-    df = f(b) - f(a)
-    while (epsilon > eps):
-        c = (a+b)/2.
-        fc = f(c)
-        if ((((fc-val)>=0)&(df>0)) | (((fc-val)<0)&(df<0))):
-            b = c
-        else:
-            a = c
-            
-        epsilon = b - a
-    solve = c
-    return solve
-
-
-def rombint(f,a,b,tol):
-    MAXITER = 30; MAXJ = 5
-    
-    g = np.zeros(MAXJ+1, dtype=np.float64)
-    h = 0.5*(b-a)
-    gmax = h*( f(a) + f(b) )
-    g[0] = gmax
-    nint = 1
-    error = 1e20
-    i = 0
-    
-    while (i<=MAXITER):
-        if ((i>5) & (np.abs(error)<tol)): 
-            break
-# Calculate next trapezoidal rule approximation to integral.
-        g0 = 0.
-    
-        for k in np.arange(nint)+1:            
-            g0 = g0 + f(a+(k+k-1)*h)
-            
-        g0 = 0.5 * g[0] + h*g0                                                      
-        h  = 0.5 * h
-        nint = nint+nint
-        jmax = np.min([i,MAXJ])  
-        fourj=1.0
-        
-        for j in range(jmax):
-# Use Richardson extrapolation.
-            fourj = 4.*fourj
-            g1    = g0+(g0-g[j])/(fourj-1.)
-            g[j]  = g0
-            g0    = g1
-        if (np.abs(g0)>tol):
-            error = 1. - gmax/g0
-        else:
-            error = gmax
-
-        gmax      = g0
-        g[jmax] = g0
-        i         = i+1
-
-    rombint = g0
-    if ((i>MAXITER) & (np.abs(error)>tol)):
-        print 'Rombint failed to converge; integral, error=%e,%e'%(rombint,error)
-    
-    return rombint
-
-
 class cosmonom:
     """
-    Calculate cosmological variables under the given parameters:
-    Hubble constant(H0), Omega_Lambda, Omega_m
-
-    All equations and coding were referred to Paper-and-pencil cosmological calculator in Pilipenko (2013):
-    http://adsabs.harvard.edu/abs/2013arXiv1303.5961P
-
-    keywords -- H0: Hubble constants (default= 67.15)
-	        OL: Omega Lambda (default= 0.683)
-                Om: Omega M (default=0.317)
-                zmin: minimum value of red-shift (default=0.)
-                zmax: maximum value of red-shift (default=20.)
-
-    outputs   -- self.zext: extremum value of z
-                 self.age0: self.age_z(0.)
-    functions -- self.Hz: H(z)    <->  self.zH: z(H)
-                 self.rz: r(z)    <->  self.zr: z(r)   - comoving radius
-                 self.dmz: dm(z)  <->  self.zdm: z(dm)
-                 self.size_z: 1" size(z) in kpc <->  self.zSize1, self.zSize2 - z(size) for z<zext, z>zext, respectively.
-                 self.angle_z: 1 kpc angle(z) <-> self.zAngle1, self.zAngle2 - z(angle) for z<zext, z>zext, respectively.
-                 self.age_z: age(z)  <-> self.zage: z(age)
-                 self.zt : self.zage(self.age0-t) - z for the corresponding lookback time
+    convert unit of waves between wavelength, frequency, energy and temperature
 
     """
-    def __init__(self,H0=67.15,OL=0.683,Om=0.317,zmin=0.,zmax=20.):
+    def __init__(self)
         self.H0 = H0
         self.OL = OL
         self.Om = Om

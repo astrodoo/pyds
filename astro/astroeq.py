@@ -92,7 +92,6 @@ def Mdotbondi(mbh=1.,rho=1.,cs=1.):
     result = 4.*np.pi * unit.g**2. * mbh**2. * rho / cs**3.
     return result 
 
-
 def Ledd(mbh):
     """ Eddington Luminosity
         mbh should be in cgs unit.
@@ -148,4 +147,10 @@ def tff(rho=1.):
             rho: density in g/cm3
     """
     result = np.sqrt(3.*np.pi/32./unit.g/rho)
+    return result
+
+def Lorentz(v):
+    """ Lorentz factor """
+
+    result = 1. / np.sqrt(1.-v*v/unit.c/unit.c)
     return result
