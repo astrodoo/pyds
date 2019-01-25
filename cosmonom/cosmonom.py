@@ -184,7 +184,7 @@ class cosmonom:
     	    ax.spines['left'].set_color('none')
     	    ax.yaxis.set_ticks_position('right')
     	    ax.tick_params(axis='y',which='major',length=10,direction='inout')
-    	    ax.tick_params(axis='y',which='minor',right='off')
+    	    #ax.tick_params(axis='y',which='minor',right='False')
 
         #figure setting
         x0 = [30.,50.]; y0 = [20.,70.]
