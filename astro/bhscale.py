@@ -88,7 +88,7 @@ class bhscale:
         x0 = [30.,50.]; y0 = [20.,70.]
         ys = 300.
         xw = 50.; xs = xw/10.
-        naxes = 5
+        naxes = 6
         winxs = np.sum(x0)+(naxes-1)*xw
         winys = np.sum(y0) + ys
         
@@ -108,49 +108,57 @@ class bhscale:
             ax1.set_yscale('linear')
         ax1.annotate(r'$r_{g}$',(1.,1.02),xycoords='axes fraction',ha='center')
         
+        # draw the 2nd axis (pc)
         pcmin = self.rg*rgmin / unit.pc
         pcmax = self.rg*rgmax / unit.pc
-        # draw the 2nd axis (pc)
         ax2 = fig.add_axes([x0[0]+xw,y0[0],xs,ys])
         setup(ax2)
         ax2.set_ylim(pcmin,pcmax)
         ax2.set_yscale(ax1.get_yscale())
         ax2.annotate('pc',(1.,1.02),xycoords='axes fraction',ha='center')
         
+        # draw the 3rd axis (au)
         aumin = self.rg*rgmin / unit.au
         aumax = self.rg*rgmax / unit.au
-        # draw the 2nd axis (au)
         ax2 = fig.add_axes([x0[0]+2*xw,y0[0],xs,ys])
         setup(ax2)
         ax2.set_ylim(aumin,aumax)
         ax2.set_yscale(ax1.get_yscale())
         ax2.annotate('au',(1.,1.02),xycoords='axes fraction',ha='center')
         
-
+        # draw the 4th axis (micro-arcsecond)
         dist_cgs = self.dist_kpc*1e3*unit.pc
-        unit_rad2mas = 180./np.pi*60.*60.*1e6
-        angmin = self.rg*rgmin / dist_cgs * unit_rad2mas
-        angmax = self.rg*rgmax / dist_cgs * unit_rad2mas
-        # draw the 2nd axis (mas)
+        unit_rad2mias = 180./np.pi*60.*60.*1e6    # rad to micro-arcsec
+        angmin = self.rg*rgmin / dist_cgs * unit_rad2mias
+        angmax = self.rg*rgmax / dist_cgs * unit_rad2mias
         ax3 = fig.add_axes([x0[0]+3*xw,y0[0],xs,ys])
         setup(ax3)
         ax3.set_ylim(angmin,angmax)
         ax3.set_yscale(ax1.get_yscale())
         ax3.annotate(r'$\mu as$',(1.,1.02),xycoords='axes fraction',ha='center')
         
-        # draw the 5st axis (rg)
+        # draw the 5th axis (v_esc escape velocity)
+        v_esc_lmin = np.sqrt(2.*unit.g*self.mbh*unit.msun / (self.rg*rgmin)) / 1e5   # km/s
+        v_esc_lmax = np.sqrt(2.*unit.g*self.mbh*unit.msun / (self.rg*rgmax)) / 1e5   # km/s
         ax5 = fig.add_axes([x0[0]+4*xw,y0[0],xs,ys])
         setup(ax5)
-        ax5.set_ylim(ax1.get_ylim())
+        ax5.set_ylim(v_esc_lmin,v_esc_lmax)
         ax5.set_yscale(ax1.get_yscale())
-        ax5.annotate(r'$r_{g}$',(1.,1.02),xycoords='axes fraction',ha='center')
+        ax5.annotate(r'$v_{esc}$ (km/s)',(1.,1.02),xycoords='axes fraction',ha='center')
+
+        # draw the 6th axis (rg)
+        ax6 = fig.add_axes([x0[0]+5*xw,y0[0],xs,ys])
+        setup(ax6)
+        ax6.set_ylim(ax1.get_ylim())
+        ax6.set_yscale(ax1.get_yscale())
+        ax6.annotate(r'$r_{g}$',(1.,1.02),xycoords='axes fraction',ha='center')
         
         # mark the line for rh and risco
-        ax5.annotate("", xy=(1,self.rh),xytext=(-39.,self.rh),xycoords='data',textcoords='data' \
+        ax6.annotate("", xy=(1,self.rh),xytext=(-49.,self.rh),xycoords='data',textcoords='data' \
                     ,arrowprops=dict(arrowstyle="-",connectionstyle="arc3,rad=0.",color='magenta'))
         ax1.annotate(r"r$_h$",(0.,self.rh*1.05),xycoords='data',color='magenta')
         
-        ax5.annotate("", xy=(1,self.risco),xytext=(-39.,self.risco),xycoords='data',textcoords='data' \
+        ax6.annotate("", xy=(1,self.risco),xytext=(-49.,self.risco),xycoords='data',textcoords='data' \
                     ,arrowprops=dict(arrowstyle="-",connectionstyle="arc3,rad=0.",color='purple'))
         ax1.annotate(r"r$_{\rm isco}$",(0.,self.risco*1.05),xycoords='data',color='purple')
         
