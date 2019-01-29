@@ -92,21 +92,21 @@ class cosmonom:
     All equations and coding were referred to Paper-and-pencil cosmological calculator in Pilipenko (2013):
     http://adsabs.harvard.edu/abs/2013arXiv1303.5961P
 
-    keywords -- H0: Hubble constants (default= 67.15)
+    keywords -- H0: Hubble constants in km/s/Mpc (default= 67.15)
 	        OL: Omega Lambda (default= 0.683)
                 Om: Omega M (default=0.317)
                 zmin: minimum value of red-shift (default=0.)
                 zmax: maximum value of red-shift (default=20.)
 
     outputs   -- self.zext: extremum value of z
-                 self.age0: self.age_z(0.)
-    functions -- self.Hz: H(z)    <->  self.zH: z(H)
-                 self.rz: r(z)    <->  self.zr: z(r)   - comoving radius
+                 self.age0: self.age_z(0.)   in Gyr
+    functions -- self.Hz: H(z) in km/s/Mpc    <->  self.zH: z(H)   
+                 self.rz: r(z) in Mpc   <->  self.zr: z(r)   - comoving radius  
                  self.dmz: dm(z)  <->  self.zdm: z(dm)
-                 self.size_z: 1" size(z) in kpc <->  self.zSize1, self.zSize2 - z(size) for z<zext, z>zext, respectively.
-                 self.angle_z: 1 kpc angle(z) <-> self.zAngle1, self.zAngle2 - z(angle) for z<zext, z>zext, respectively.
-                 self.age_z: age(z)  <-> self.zage: z(age)
-                 self.zt : self.zage(self.age0-t) - z for the corresponding lookback time
+                 self.size_z: 1" size(z) in kpc <->  self.zSize1, self.zSize2 - z(size) for z<zext, z>zext, respectively.   
+                 self.angle_z: 1 kpc angle(z) in arcsec <-> self.zAngle1, self.zAngle2 - z(angle) for z<zext, z>zext, respectively.
+                 self.age_z: age(z)  in Gyr <-> self.zage: z(age)
+                 self.zt : self.zage(self.age0-t) - z for the corresponding lookback time in Gyr
 
     """
     def __init__(self,H0=67.15,OL=0.683,Om=0.317,zmin=0.,zmax=20.):
@@ -143,19 +143,19 @@ class cosmonom:
 	self.age0    = self.age_z(0.)
 	self.zt      = lambda t: self.zage(self.age0 - t)
 
-	self.Hz.__doc__      = "function: H(z)"
+	self.Hz.__doc__      = "function: H(z) in km/s/Mpc"
 	self.zH.__doc__      = "function: z(H)"
-	self.rz.__doc__      = "function: comoving radius r(z)" 
-	self.zr.__doc__      = "function: z(r) where r is comving radius" 
+	self.rz.__doc__      = "function: comoving radius r(z) in Mpc" 
+	self.zr.__doc__      = "function: z(r) where r is comving radius in unit of kpc" 
 	self.dmz.__doc__     = "function: dm(z)"
 	self.zdm.__doc__     = "function: z(dm)"
-	self.size_z.__doc__  = 'function: 1" size(z)'
+	self.size_z.__doc__  = 'function: 1" size(z) in kpc'
 	self.zSize1.__doc__  = "function: z(size) where z < z_ext"
 	self.zSize2.__doc__  = "function: z(size) where z > z_ext"
-	self.angle_z.__doc__ = "function: 1kpc angle(z)"
+	self.angle_z.__doc__ = "function: 1kpc angle(z) in arcsec"
 	self.zAngle1.__doc__ = "function: z(angle) where z < z_ext"
 	self.zAngle2.__doc__ = "function: z(angle) where z > z_ext"
-	self.age_z.__doc__   = "function: age(z)"
+	self.age_z.__doc__   = "function: age(z) in Gyr"
 	self.zage.__doc__    = "function: z(age)"
 	self.zt.__doc__      = "function: zage(age0 - t)"
 	
@@ -319,9 +319,18 @@ class cosmonom:
 
         if 'z' in keywords.keys():
             zz = keywords['z']
+            print "z: %f"%zz
+            print "H(z) = %f km/s/Mpc"%self.Hz(zz)
+            print "comoving radius r(z) = %f Mpc"%self.rz(zz)
+            print "1 arcsec size(z) = %f kpc"%self.size_z(zz)
+            print "angle 1kpc(z) = %f arcsec"%self.angle_z(zz)
+            print "age(z) = %f Gyr"%self.age_z(zz)
+            print "lookback time(z) = %f Gyr"%(self.age0 - self.age_z(zz))
+
             ax9.annotate("", xy=(1,zz),xytext=(-79.,zz),xycoords='data',textcoords='data' \
                 ,arrowprops=dict(arrowstyle="-",connectionstyle="arc3,rad=0.",color='magenta'))
 
+        plt.show()
 	# save the image
         if 'out' in keywords.keys():
             print 'saved to '+keywords['out']

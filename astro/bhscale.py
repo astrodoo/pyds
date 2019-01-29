@@ -166,6 +166,7 @@ class bhscale:
         ParamStr = r'M$_{\rm BH}$=%5.2e M$_{\odot}$, Distance=%5.2e kpc, spin=%4.2f'%(self.mbh, self.dist_kpc,self.spin)
         ax1.annotate(ParamStr,(1.,1.07),xycoords='axes fraction',ha='left',fontsize='large')
         
+        plt.show()
 	# save the image
         if 'out' in keywords.keys():
             print 'saved to '+keywords['out']
