@@ -41,7 +41,7 @@ class bhscale:
         Mbh_cgs = self.mbh*unit.msun
         return unit.g*Mbh_cgs/unit.c/unit.c
     
-    def  calc_rh(self):
+    def calc_rh(self):
         return 1.+np.sqrt(1.-self.spin*self.spin)
     
     def calc_risco(self):
@@ -55,6 +55,23 @@ class bhscale:
             risco = 3.+z2 - np.sqrt( (3.-z1) * (3. + z1 + 2.*z2) )
         
         return risco
+
+    def calc_torb(self, rr): 
+        """
+        calculate the orbital time in seconds with given radius in cm
+        """
+
+        vkep = np.sqrt(unit.g*self.mbh*unit.msun/rr)
+
+        return 2.*np.pi*rr/vkep
+
+    def torb2r(self, tt): 
+        """
+        calculate the radius in cm with given orbital time in second
+        """
+
+        return np.power(tt*0.5/np.pi, 2./3.) * np.power(unit.g*self.mbh*unit.msun,1./3.)
+        
     
         
     def draw(self,rgmin=1., rgmax=1e3, log=True, **keywords):
