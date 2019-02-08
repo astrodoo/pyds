@@ -36,15 +36,32 @@ class bhscale:
         self.rg = self.calc_rg()
         self.rh = self.calc_rh()
         self.risco = self.calc_risco()
+        self.tg = self.calc_tg()
 
     def calc_rg(self):
+        """ 
+        calculate of gravitational radius in cgs
+        """
         Mbh_cgs = self.mbh*unit.msun
         return unit.g*Mbh_cgs/unit.c/unit.c
+
+    def calc_tg(self):
+        """
+        calculate of gravitational time unit in second 
+        """
+        Mbh_cgs = self.mbh*unit.msun
+        return unit.g*Mbh_cgs / unit.c/unit.c/unit.c
     
     def calc_rh(self):
+        """
+        calculate the event horizon radius in rg unit
+        """
         return 1.+np.sqrt(1.-self.spin*self.spin)
     
     def calc_risco(self):
+        """
+        calculate the radius of inner most stable circular orbit in rg unit
+        """
         z1 = 1. + np.power(1.-self.spin*self.spin,1./3.) \
             * ( np.power(1.+self.spin,1./3.) + np.power(1.-self.spin,1./3.) ) 
         z2 = np.sqrt(3.*self.spin*self.spin + z1*z1)
@@ -65,13 +82,33 @@ class bhscale:
 
         return 2.*np.pi*rr/vkep
 
-    def torb2r(self, tt): 
+    def calc_torb2r(self, tt): 
         """
         calculate the radius in cm with given orbital time in second
         """
 
         return np.power(tt*0.5/np.pi, 2./3.) * np.power(unit.g*self.mbh*unit.msun,1./3.)
-        
+ 
+
+    def calc_torbg(self, rr): 
+        """
+        calculate the orbital time in seconds with considering the BH spin  with given radius in cm
+        Formular is given in Hamaus+09
+        """
+
+        return 2.*np.pi*self.rg/unit.c * ( np.power(rr/self.rg, 1.5) + self.spin )
+
+    def calc_torbg2r(self, tt): 
+        """
+        calculate the radius in cm with given orbital time in second with the consideration of BH spin
+        Formular is given in Hamaus+09
+        """
+
+        return self.rg * np.power( unit.c*tt / (2.*np.pi*self.rg) - self.spin, 2./3.)
+ 
+
+
+       
     
         
     def draw(self,rgmin=1., rgmax=1e3, log=True, **keywords):
