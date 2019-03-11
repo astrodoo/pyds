@@ -28,7 +28,7 @@ class bhscale:
                  self.risco: the radius of inner stable circular orbit in the unit of rg
     """
 
-    def __init__(self, mbh=4.1e6, distance=8.1, spin=0.9375):
+    def __init__(self, mbh=4.1e6, distance=8.1, spin=0.9375, rad_eff=0.1, cgs=False):
         self.mbh = mbh
         self.dist_kpc = distance
         self.spin = spin
@@ -37,6 +37,9 @@ class bhscale:
         self.rh = self.calc_rh()
         self.risco = self.calc_risco()
         self.tg = self.calc_tg()
+
+        self.Ledd = self.calc_Ledd(cgs=cgs)
+        self.Mdotedd = self.calc_Mdotedd(rad_eff=rad_eff,cgs=cgs)
 
     def calc_rg(self):
         """ 
@@ -106,6 +109,35 @@ class bhscale:
 
         return self.rg * np.power( unit.c*tt / (2.*np.pi*self.rg) - self.spin, 2./3.)
  
+    def calc_Ledd(self,cgs=False): 
+        """
+        calculate the eddington luminosity
+        
+        keywords:
+            cgs - if given, output is in cgs unit, otherwise the unit is L_sun (by default)
+        """
+        Ledd = 4.*np.pi*unit.g*self.mbh*unit.msun*unit.mp*unit.c/unit.sigmaT
+        if (cgs):
+            return Ledd
+        else:
+            return Ledd/unit.lsun
+        return 
+
+    def calc_Mdotedd(self,rad_eff=0.1,cgs=False): 
+        """
+        calculate the eddington mass accretion rate 
+
+        keywords:
+            rad_eff - radiative efficiency. default is 0.1
+            cgs - if given, output is in cgs unit, otherwise the unit is M_sun/year (by default)
+        """
+        Mdotedd =  4.*np.pi*unit.g*self.mbh*unit.msun*unit.mp/rad_eff/unit.c/unit.sigmaT
+        if (cgs):
+            return Mdotedd
+        else:
+            return Mdotedd/unit.msun*unit.year
+
+
 
 
        
