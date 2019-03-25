@@ -8,6 +8,7 @@ consmatch = {'g'      : 'G',       \
              'au'     : 'au',      \
              'c'      : 'c',       \
 #             'e'      : 'e',       \
+             'alpha'  : 'alpha',   \
              'h'      : 'h',       \
              'kb'     : 'k_B',     \
              'pc'     : 'pc',      \
