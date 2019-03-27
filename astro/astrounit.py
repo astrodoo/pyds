@@ -21,6 +21,7 @@ consmatch = {'g'      : 'G',       \
              'sigmaT' : 'sigma_T', \
              'sigmaSB': 'sigma_sb'}
 
+esu = cons.e.esu.value
 year = 60.*60.*24.*365.
 lyr = cons.c.cgs.value *year
 eV  = units.eV.to(units.erg)
@@ -38,6 +39,7 @@ class astrounit:
     for key,val in consmatch.iteritems():
         exec('%s = cons.%s.cgs.value'%(key,val))
 
+    esu  = esu
     year = year
     lyr  = lyr
     eV   = eV
@@ -61,6 +63,7 @@ def info():
         exec('astrounit = cons.%s.cgs.unit'%val)
         print '%8s \t %15s \t %e \t %s'%(key,val,astroval,astrounit )
 
+    print '%8s \t %15s \t %e \t %s'%('esu','e.esu',esu,'cgs' )
     print '----------------------------------------------------------------------'
     print 'not in astropy:'
     print '%8s \t %15s \t %e \t %s'%('year','not in astropy',year,'s' )
