@@ -12,6 +12,7 @@ Written by:
 History:
      Written, 25 January 2019
 """
+from __future__ import print_function
 import numpy as np
 from pyds.astro import astrounit as unit
 
@@ -156,10 +157,10 @@ class bhscale:
         import matplotlib.pyplot as plt
         import matplotlib.ticker as ticker
     
-        print 'BH Params: Mbh=%e M_sun, spin=%f, Distance=%e kpc'%(self.mbh,self.spin,self.dist_kpc)
-        print 'rg: %e cm'%self.rg
-        print 'rh: %f rg'%self.rh
-        print 'risco: %f rg'%self.risco
+        print('BH Params: Mbh=%e M_sun, spin=%f, Distance=%e kpc'%(self.mbh,self.spin,self.dist_kpc) )
+        print('rg: %e cm'%self.rg)
+        print('rh: %f rg'%self.rh)
+        print('risco: %f rg'%self.risco)
         # Setup a plot such that only the bottom spine is shown
         def setup(ax):
             ax.spines['top'].set_color('none')
@@ -255,5 +256,5 @@ class bhscale:
         plt.show()
 	# save the image
         if 'out' in keywords.keys():
-            print 'saved to '+keywords['out']
+            print('saved to %s'%keywords['out'])
             fig.savefig(keywords['out'])

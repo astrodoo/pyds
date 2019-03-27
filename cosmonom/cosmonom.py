@@ -16,6 +16,7 @@ Written by:
 History:
      Written, 2 April 2018
 """
+from __future__ import print_function
 import numpy as np
 
 def solve(f,val,a0,b0,eps):
@@ -79,7 +80,7 @@ def rombint(f,a,b,tol):
 
     rombint = g0
     if ((i>MAXITER) & (np.abs(error)>tol)):
-        print 'Rombint failed to converge; integral, error=%e,%e'%(rombint,error)
+        print('Rombint failed to converge; integral, error=%e,%e'%(rombint,error) )
     
     return rombint
 
@@ -119,65 +120,65 @@ class cosmonom:
         if self.zmin==0.:
             self.zmin = np.min([self.zmax/10.,0.1])
 	
-	self.Hz      = lambda z: self.H0 * np.sqrt( self.OL + (1.+z)**3 * self.Om)
-	self.zH      = lambda H: solve(self.Hz, H, self.zmin-1., self.zmax*2., 1e-4)
-	rf_f         = lambda x: 1./np.sqrt((1.+x)**3. + self.OL/self.Om)
-	self.rz      = lambda z: rombint(rf_f, 0., z, 0.1) * 299792.0 / self.H0 / np.sqrt(self.Om)
-	self.zr      = lambda r: solve(self.rz, r, self.zmin, self.zmax*2, 1e-4)
-	self.dmz     = lambda z: 5. * np.log10(self.rz(z) * (1.+z)) + 25.
-	self.zdm     = lambda dm: solve(self.dmz, dm, self.zmin, self.zmax*2., 1e-4)
+        self.Hz = lambda z: self.H0 * np.sqrt( self.OL + (1.+z)**3 * self.Om)
+        self.zH = lambda H: solve(self.Hz, H, self.zmin-1., self.zmax*2., 1e-4)
+        rf_f         = lambda x: 1./np.sqrt((1.+x)**3. + self.OL/self.Om)
+        self.rz      = lambda z: rombint(rf_f, 0., z, 0.1) * 299792.0 / self.H0 / np.sqrt(self.Om)
+        self.zr      = lambda r: solve(self.rz, r, self.zmin, self.zmax*2, 1e-4)
+        self.dmz     = lambda z: 5. * np.log10(self.rz(z) * (1.+z)) + 25.
+        self.zdm     = lambda dm: solve(self.dmz, dm, self.zmin, self.zmax*2., 1e-4)
 
-	eq_zext      = lambda z: self.rz(z)/(1.+z) - rf_f(z) * 299792. / self.H0 / np.sqrt(self.Om)
-	self.zext    = solve(eq_zext, 0., self.zmin, self.zmax*2, 1e-4)
+        eq_zext      = lambda z: self.rz(z)/(1.+z) - rf_f(z) * 299792. / self.H0 / np.sqrt(self.Om)
+        self.zext    = solve(eq_zext, 0., self.zmin, self.zmax*2, 1e-4)
+        
+        self.size_z  = lambda z: self.rz(z)/(1.+z) * 1./206265. * 1e3  # in kpc
+        self.zSize1  = lambda s: solve(self.size_z, s, self.zmin, self.zext, 1e-4)
+        self.zSize2  = lambda s: solve(self.size_z, s, self.zext, self.zmax*2, 1e-4)
+        self.angle_z = lambda z: 1. / self.size_z(z)
+        self.zAngle1 = lambda a: solve(self.angle_z, a, self.zmin+1e-4, self.zext, 1e-4)
+        self.zAngle2 = lambda a: solve(self.angle_z, a, self.zext, self.zmax*2, 1e-4)
+        
+        agef         = lambda z: 1./(1.+z) / np.sqrt(self.OL + self.Om*(1.+z)**3)
+        self.age_z   = lambda z: rombint(agef, z, 1000.0, 0.001) * 977.8 / self.H0
+        self.zage    = lambda age: solve(self.age_z, age, self.zmin-0.5, self.zmax*2, 1e-4)
+        self.age0    = self.age_z(0.)
+        self.zt      = lambda t: self.zage(self.age0 - t)
+        
+        self.Hz.__doc__      = "function: H(z) in km/s/Mpc"
+        self.zH.__doc__      = "function: z(H)"
+        self.rz.__doc__      = "function: comoving radius r(z) in Mpc" 
+        self.zr.__doc__      = "function: z(r) where r is comving radius in unit of kpc" 
+        self.dmz.__doc__     = "function: dm(z)"
+        self.zdm.__doc__     = "function: z(dm)"
+        self.size_z.__doc__  = 'function: 1" size(z) in kpc'
+        self.zSize1.__doc__  = "function: z(size) where z < z_ext"
+        self.zSize2.__doc__  = "function: z(size) where z > z_ext"
+        self.angle_z.__doc__ = "function: 1kpc angle(z) in arcsec"
+        self.zAngle1.__doc__ = "function: z(angle) where z < z_ext"
+        self.zAngle2.__doc__ = "function: z(angle) where z > z_ext"
+        self.age_z.__doc__   = "function: age(z) in Gyr"
+        self.zage.__doc__    = "function: z(age)"
+        self.zt.__doc__      = "function: zage(age0 - t)"
 
-	self.size_z  = lambda z: self.rz(z)/(1.+z) * 1./206265. * 1e3  # in kpc
-	self.zSize1  = lambda s: solve(self.size_z, s, self.zmin, self.zext, 1e-4)
-	self.zSize2  = lambda s: solve(self.size_z, s, self.zext, self.zmax*2, 1e-4)
-	self.angle_z = lambda z: 1. / self.size_z(z)
-	self.zAngle1 = lambda a: solve(self.angle_z, a, self.zmin+1e-4, self.zext, 1e-4)
-	self.zAngle2 = lambda a: solve(self.angle_z, a, self.zext, self.zmax*2, 1e-4)
-
-	agef         = lambda z: 1./(1.+z) / np.sqrt(self.OL + self.Om*(1.+z)**3)
-	self.age_z   = lambda z: rombint(agef, z, 1000.0, 0.001) * 977.8 / self.H0
-	self.zage    = lambda age: solve(self.age_z, age, self.zmin-0.5, self.zmax*2, 1e-4)
-	self.age0    = self.age_z(0.)
-	self.zt      = lambda t: self.zage(self.age0 - t)
-
-	self.Hz.__doc__      = "function: H(z) in km/s/Mpc"
-	self.zH.__doc__      = "function: z(H)"
-	self.rz.__doc__      = "function: comoving radius r(z) in Mpc" 
-	self.zr.__doc__      = "function: z(r) where r is comving radius in unit of kpc" 
-	self.dmz.__doc__     = "function: dm(z)"
-	self.zdm.__doc__     = "function: z(dm)"
-	self.size_z.__doc__  = 'function: 1" size(z) in kpc'
-	self.zSize1.__doc__  = "function: z(size) where z < z_ext"
-	self.zSize2.__doc__  = "function: z(size) where z > z_ext"
-	self.angle_z.__doc__ = "function: 1kpc angle(z) in arcsec"
-	self.zAngle1.__doc__ = "function: z(angle) where z < z_ext"
-	self.zAngle2.__doc__ = "function: z(angle) where z > z_ext"
-	self.age_z.__doc__   = "function: age(z) in Gyr"
-	self.zage.__doc__    = "function: z(age)"
-	self.zt.__doc__      = "function: zage(age0 - t)"
-	
 
     def draw(self, **keywords):
-	"""
-	Draw the scaled axes for the cosmological variables
+        """
+        Draw the scaled axes for the cosmological variables
 
-	**keywords -- out: if given, the plot will be saved to the designated output file (type = string) 
+        **keywords -- out: if given, the plot will be saved to the designated output file (type = string) 
                         z: if given, it will draw the horizontal line for the value of z so that it 
                            helps catching the corresponding variables. (type = float)
-	"""
-	import matplotlib.pyplot as plt
-	import matplotlib.ticker as ticker
+        """
+        import matplotlib.pyplot as plt
+        import matplotlib.ticker as ticker
 
-        print 'z_extremum: %f'%self.zext
-        print 'size(zext): %f, angle(zext): %f'%(self.size_z(self.zext),self.angle_z(self.zext))
+        print('z_extremum: %f'%self.zext)
+        print('size(zext): %f, angle(zext): %f'%(self.size_z(self.zext),self.angle_z(self.zext)))
 
-	ParamStr = r'$H_{0}$=%5.2f, $\Omega_{\Lambda}$=%5.3f, $\Omega_{M}$=%5.3f'%(self.H0,self.OL,self.Om)
+        ParamStr = r'$H_{0}$=%5.2f, $\Omega_{\Lambda}$=%5.3f, $\Omega_{M}$=%5.3f'%(self.H0,self.OL,self.Om)
 
         # Setup a plot such that only the bottom spine is shown
-	def setup(ax):
+        def setup(ax):
     	    ax.spines['top'].set_color('none')
     	    ax.spines['bottom'].set_color('none')
     	    ax.xaxis.set_major_locator(ticker.NullLocator())
@@ -319,19 +320,19 @@ class cosmonom:
 
         if 'z' in keywords.keys():
             zz = keywords['z']
-            print "z: %f"%zz
-            print "H(z) = %f km/s/Mpc"%self.Hz(zz)
-            print "comoving radius r(z) = %f Mpc"%self.rz(zz)
-            print "1 arcsec size(z) = %f kpc"%self.size_z(zz)
-            print "angle 1kpc(z) = %f arcsec"%self.angle_z(zz)
-            print "age(z) = %f Gyr"%self.age_z(zz)
-            print "lookback time(z) = %f Gyr"%(self.age0 - self.age_z(zz))
+            print("z: %f"%zz)
+            print("H(z) = %f km/s/Mpc"%self.Hz(zz))
+            print("comoving radius r(z) = %f Mpc"%self.rz(zz))
+            print("1 arcsec size(z) = %f kpc"%self.size_z(zz))
+            print("angle 1kpc(z) = %f arcsec"%self.angle_z(zz))
+            print("age(z) = %f Gyr"%self.age_z(zz))
+            print("lookback time(z) = %f Gyr"%(self.age0 - self.age_z(zz)))
 
             ax9.annotate("", xy=(1,zz),xytext=(-79.,zz),xycoords='data',textcoords='data' \
                 ,arrowprops=dict(arrowstyle="-",connectionstyle="arc3,rad=0.",color='magenta'))
 
         plt.show()
-	# save the image
+        # save the image
         if 'out' in keywords.keys():
-            print 'saved to '+keywords['out']
+            print('saved to %s'%keywords['out'])
             fig.savefig(keywords['out'])

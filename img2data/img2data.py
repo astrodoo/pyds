@@ -27,6 +27,7 @@ Written by:
 History:
      Written, 30 March 2017
 """
+from __future__ import print_function
 import ipywidgets as widgets
 from IPython.display import display
 import numpy as np
@@ -51,7 +52,7 @@ class readimg:
         if len(args) == 2:    
             self.imgplot = args[0]; self.ax = args[1]
         else:
-            print 'Number of Args should be 2.'
+            print('Number of Args should be 2.')
             return None  
 
         self.w = widgets.HTML()
@@ -59,12 +60,12 @@ class readimg:
         if 'xlim' in keywords.keys():
             self.xlim = keywords['xlim']
         else:
-            print 'xlim should be entered.'
+            print('xlim should be entered.')
             return None
         if 'ylim' in keywords.keys():
             self.ylim = keywords['ylim']
         else:
-            print 'ylim should be entered.'
+            print('ylim should be entered.')
             return None
         
         if 'xlog' in keywords.keys():

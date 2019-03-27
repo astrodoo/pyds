@@ -1,3 +1,5 @@
+from __future__ import print_function
+from future.utils import iteritems
 from astropy import constants as cons
 from astropy import units
 
@@ -28,7 +30,7 @@ eV  = units.eV.to(units.erg)
 Jy = (1*units.Jy).cgs.value
 re  = 2.81794092e-13
 
-class astrounit:
+class astrounit: 
     """
     assign the astrophysical constants.
     The available constants will be shown as follows:
@@ -36,7 +38,7 @@ class astrounit:
     >>> astrounit.info()
     >>> astrounit.g
     """
-    for key,val in consmatch.iteritems():
+    for (key,val) in iteritems(consmatch):
         exec('%s = cons.%s.cgs.value'%(key,val))
 
     esu  = esu
@@ -54,21 +56,23 @@ class astrounit:
         pass
 
 
-
 def info():
-    print '%8s \t %15s \t %s \t %s'%('name','name in astropy','value in cgs','unit')
-    print '----------------------------------------------------------------------'
-    for key,val in consmatch.iteritems():
-        exec('astroval  = cons.%s.cgs.value'%val)
-        exec('astrounit = cons.%s.cgs.unit'%val)
-        print '%8s \t %15s \t %e \t %s'%(key,val,astroval,astrounit )
+    print('%8s \t %15s \t %s \t %s'%('name','name in astropy','value in cgs','unit'))
+    print('----------------------------------------------------------------------')
+    for (key,val) in iteritems(consmatch):
+        execscope = {}           # dictionary for exec scope     
+        exec('astroval  = cons.%s.cgs.value'%val, globals(), execscope)
+        astroval = execscope['astroval']
+        exec('astrounit = cons.%s.cgs.unit'%val, globals(), execscope)
+        astrounit = execscope['astrounit']
+        print('%8s \t %15s \t %e \t %s'%(key,val,astroval,astrounit ))
 
-    print '%8s \t %15s \t %e \t %s'%('esu','e.esu',esu,'cgs' )
-    print '----------------------------------------------------------------------'
-    print 'not in astropy:'
-    print '%8s \t %15s \t %e \t %s'%('year','not in astropy',year,'s' )
-    print '%8s \t %15s \t %e \t %s'%('lyr','not in astropy',lyr,'cm' )
-    print '%8s \t %15s \t %e \t %s'%('eV','not in astropy',eV,'erg' )
-    print '%8s \t %15s \t %e \t %s'%('Jy','not in astropy',Jy,'erg / (cm2 s Hz)' )
-    print '%8s \t %15s \t %e \t %s'%('re','not in astropy',re,'cm' )
+    print('%8s \t %15s \t %e \t %s'%('esu','e.esu',esu,'cgs' ))
+    print('----------------------------------------------------------------------')
+    print('not in astropy:')
+    print('%8s \t %15s \t %e \t %s'%('year','not in astropy',year,'s' ) )
+    print('%8s \t %15s \t %e \t %s'%('lyr','not in astropy',lyr,'cm' ) )
+    print('%8s \t %15s \t %e \t %s'%('eV','not in astropy',eV,'erg' ) )
+    print('%8s \t  %15s \t %e \t %s'%('Jy','not in astropy',Jy,'erg / (cm2 s Hz)' ) )
+    print('%8s \t %15s \t %e \t %s'%('re','not in astropy',re,'cm' ) )
 

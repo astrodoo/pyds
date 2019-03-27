@@ -35,7 +35,7 @@ def sec(ppre0,p,v,cs,gamma):
 
         if ((np.abs(dp) < eps) | (f1 == 0.)): return re_sec
 
-    print 'ERROR: secant exceed maximum iterations'
+    raise ValueError('ERROR: secant exceed maximum iterations')
 
 
 def sodshockSolve(d=[1.,0.125], p=[1.,0.1], v=[0.,0.], gamma=1.66667, \

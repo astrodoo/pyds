@@ -30,11 +30,11 @@ def mtickexp(ax,axis='x',pointnum=1):
     fmt = r'%.'+str(pointnum)+'fx$10^{%i}$'
 
     def format_tick(x,pos=None):
-	xstr_e = '%e'%x
-    	xsplt = xstr_e.split('e')
-    	xfact = float(xsplt[0])
-    	xexp  = int(xsplt[1])
-    
+        xstr_e = '%e'%x
+        xsplt = xstr_e.split('e')
+        xfact = float(xsplt[0])
+        xexp  = int(xsplt[1])
+
         if x != 0:
             xstr = fmt%(xfact,xexp)
         else:

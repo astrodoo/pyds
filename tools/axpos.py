@@ -20,8 +20,8 @@ import sys
 
 class axpos:
     def __init__(self,multplt,pltx0=[50.,10.],plty0=[30.,10.],pltxs=200.,pltys=200.,pltxw=0.,pltyw=0.):
-	""" 
-	set the position of multiplots
+        """ 
+        set the position of multiplots
 
         args:
             multplt: two digits integer, indicating the number of row & column 
@@ -52,21 +52,21 @@ class axpos:
         if (type(pltxs).__name__=='list'):
             if (len(pltxs) != nx):
                 sys.exit('length of pltxs should be equal to nx.')
-            self.pltxs = map(float,pltxs)
+            self.pltxs = list(map(float,pltxs))
         else:
             self.pltxs = [float(pltxs) for i in range(nx)]
       
         if (type(pltys).__name__=='list'):
             if (len(pltys) != ny):
                 sys.exit('length of pltys should be equal to ny.')
-            self.pltys = map(float,pltys)
+            self.pltys = list(map(float,pltys))
         else:
             self.pltys = [float(pltys) for i in range(ny)]
         
         self.winxs=np.sum(pltx0)+np.sum(self.pltxs)+(nx-1)*float(pltxw)
         self.winys=np.sum(plty0)+np.sum(self.pltys)+(ny-1)*float(pltyw)
     
-        self.pltx0 = map(float,pltx0); self.plty0 = map(float,plty0)
+        self.pltx0 = list(map(float,pltx0)); self.plty0 = list(map(float,plty0))
         self.pltxw = float(pltxw); self.pltyw = float(pltyw)
         
             

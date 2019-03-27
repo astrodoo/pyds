@@ -1,3 +1,6 @@
 *.pyc
 *~
-ipynb/.ipynb_checkpoints/
+ipynb/.ipynb_checkpoints/*
+__pycache__/*
+*/__pycache__/*
+*/obsolete/*
