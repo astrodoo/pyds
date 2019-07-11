@@ -29,25 +29,49 @@ class bhscale:
                  self.risco: the radius of inner stable circular orbit in the unit of rg
     """
 
-    def __init__(self, mbh=4.1e6, distance=8.1, spin=0.9375, rad_eff=0.1, cgs=False):
+    def __init__(self, mbh=4.1e6, distance=8.1, spin=0.9375, rad_eff=0.1, cgs=False, silent=True):
         self.mbh = mbh
         self.dist_kpc = distance
         self.spin = spin
 
         self.rg = self.calc_rg()
         self.rh = self.calc_rh()
+
+        dist_cgs = self.dist_kpc*1e3*unit.pc
+        unit_rad2mias = 180./np.pi*60.*60.*1e6    # rad to micro-arcsec
+        self.rh_mias = self.rg*self.rh / dist_cgs * unit_rad2mias
+ 
         self.risco = self.calc_risco()
         self.tg = self.calc_tg()
 
         self.Ledd = self.calc_Ledd(cgs=cgs)
         self.Mdotedd = self.calc_Mdotedd(rad_eff=rad_eff,cgs=cgs)
 
+        self.cgs = cgs
+
+        if (not silent):
+            print('BH Params: Mbh=%e M_sun, spin=%f, Distance=%e kpc'%(self.mbh,self.spin,self.dist_kpc) )
+            print('rg: %e cm'%self.rg)
+            print('rh: %f rg'%self.rh)
+            print('rh_mias: %f micro-arcsec'%self.rh_mias)
+            print('risco: %f rg'%self.risco)
+
+            if (cgs):
+                print('L_edd = %e erg s^-1'%self.Ledd)
+                print('Mdot_edd = %e g s^-1'%self.Mdotedd)
+            else:
+                print('L_edd = %e L_sun'%self.Ledd)
+                print('Mdot_edd = %e M_sun/year'%self.Mdotedd)
+
+
     def calc_rg(self):
         """ 
         calculate of gravitational radius in cgs
         """
         Mbh_cgs = self.mbh*unit.msun
+
         return unit.g*Mbh_cgs/unit.c/unit.c
+
 
     def calc_tg(self):
         """
@@ -56,12 +80,14 @@ class bhscale:
         Mbh_cgs = self.mbh*unit.msun
         return unit.g*Mbh_cgs / unit.c/unit.c/unit.c
     
+
     def calc_rh(self):
         """
         calculate the event horizon radius in rg unit
         """
         return 1.+np.sqrt(1.-self.spin*self.spin)
     
+
     def calc_risco(self):
         """
         calculate the radius of inner most stable circular orbit in rg unit
@@ -76,6 +102,7 @@ class bhscale:
             risco = 3.+z2 - np.sqrt( (3.-z1) * (3. + z1 + 2.*z2) )
         
         return risco
+
 
     def calc_torb(self, rr): 
         """
@@ -96,11 +123,12 @@ class bhscale:
 
     def calc_torbg(self, rr): 
         """
-        calculate the orbital time in seconds with considering the BH spin  with given radius in cm
+        calculate the orbital time in seconds with considering the BH spin with given radius in cm
         Formular is given in Hamaus+09
         """
 
         return 2.*np.pi*self.rg/unit.c * ( np.power(rr/self.rg, 1.5) + self.spin )
+
 
     def calc_torbg2r(self, tt): 
         """
@@ -110,6 +138,7 @@ class bhscale:
 
         return self.rg * np.power( unit.c*tt / (2.*np.pi*self.rg) - self.spin, 2./3.)
  
+
     def calc_Ledd(self,cgs=False): 
         """
         calculate the eddington luminosity
@@ -117,12 +146,14 @@ class bhscale:
         keywords:
             cgs - if given, output is in cgs unit, otherwise the unit is L_sun (by default)
         """
+
         Ledd = 4.*np.pi*unit.g*self.mbh*unit.msun*unit.mp*unit.c/unit.sigmaT
+
         if (cgs):
             return Ledd
         else:
             return Ledd/unit.lsun
-        return 
+
 
     def calc_Mdotedd(self,rad_eff=0.1,cgs=False): 
         """
@@ -132,19 +163,16 @@ class bhscale:
             rad_eff - radiative efficiency. default is 0.1
             cgs - if given, output is in cgs unit, otherwise the unit is M_sun/year (by default)
         """
+
         Mdotedd =  4.*np.pi*unit.g*self.mbh*unit.msun*unit.mp/rad_eff/unit.c/unit.sigmaT
+
         if (cgs):
             return Mdotedd
         else:
             return Mdotedd/unit.msun*unit.year
 
-
-
-
-       
-    
         
-    def draw(self,rgmin=1., rgmax=1e3, log=True, **keywords):
+    def draw(self,rgmin=1., rgmax=1e3, log=True, silent=False, **keywords):
         """
         Draw the scaled axes with given black hole parameters
 
@@ -156,11 +184,25 @@ class bhscale:
         """
         import matplotlib.pyplot as plt
         import matplotlib.ticker as ticker
-    
-        print('BH Params: Mbh=%e M_sun, spin=%f, Distance=%e kpc'%(self.mbh,self.spin,self.dist_kpc) )
-        print('rg: %e cm'%self.rg)
-        print('rh: %f rg'%self.rh)
-        print('risco: %f rg'%self.risco)
+
+        dist_cgs = self.dist_kpc*1e3*unit.pc
+        unit_rad2mias = 180./np.pi*60.*60.*1e6    # rad to micro-arcsec
+        self.rh_mias = self.rg*self.rh / dist_cgs * unit_rad2mias
+ 
+        if (not silent):
+            print('BH Params: Mbh=%e M_sun, spin=%f, Distance=%e kpc'%(self.mbh,self.spin,self.dist_kpc) )
+            print('rg: %e cm'%self.rg)
+            print('rh: %f rg'%self.rh)
+            print('rh_mias: %f micro-arcsec'%self.rh_mias)
+            print('risco: %f rg'%self.risco)
+
+            if (self.cgs):
+                print('L_edd = %e erg s^-1'%self.Ledd)
+                print('Mdot_edd = %e g s^-1'%self.Mdotedd)
+            else:
+                print('L_edd = %e L_sun'%self.Ledd)
+                print('Mdot_edd = %e M_sun/year'%self.Mdotedd)
+
         # Setup a plot such that only the bottom spine is shown
         def setup(ax):
             ax.spines['top'].set_color('none')
