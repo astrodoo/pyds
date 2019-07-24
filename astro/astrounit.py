@@ -18,11 +18,12 @@ consmatch = {'g'      : 'G',       \
              'me'     : 'm_e',     \
              'mn'     : 'm_n',     \
              'mp'     : 'm_p',     \
-             'mh'     : 'm_p',     \
+#             'mh'     : 'm_p',     \
              'amu'    : 'u',       \
              'sigmaT' : 'sigma_T', \
              'sigmaSB': 'sigma_sb'}
 
+mh = cons.m_p.cgs.value + cons.m_e.cgs.value
 esu = cons.e.esu.value
 year = 60.*60.*24.*365.
 lyr = cons.c.cgs.value *year
@@ -41,6 +42,7 @@ class astrounit:
     for (key,val) in iteritems(consmatch):
         exec('%s = cons.%s.cgs.value'%(key,val))
 
+    mh   = mh
     esu  = esu
     year = year
     lyr  = lyr
@@ -70,6 +72,7 @@ def info():
     print('%8s \t %15s \t %e \t %s'%('esu','e.esu',esu,'cgs' ))
     print('----------------------------------------------------------------------')
     print('not in astropy:')
+    print('%8s \t %15s \t %e \t %s'%('mh','not in astropy',mh,'g' ) )
     print('%8s \t %15s \t %e \t %s'%('year','not in astropy',year,'s' ) )
     print('%8s \t %15s \t %e \t %s'%('lyr','not in astropy',lyr,'cm' ) )
     print('%8s \t %15s \t %e \t %s'%('eV','not in astropy',eV,'erg' ) )
