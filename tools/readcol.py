@@ -43,6 +43,13 @@ def readcol(file,format=[],nskip=0):
     # skip the lines
     text = text[nskip:]
 
+    text = np.asarray(text)
+
+    # remove the empty lines
+    no_empty = np.ones(len(text),dtype=bool)
+    no_empty[np.where((text=='\n') | (text==''))] = False
+    text = text[no_empty]
+
     nlines = np.str(len(text))
     ncols = len(text[0].split())
 
