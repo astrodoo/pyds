@@ -14,7 +14,7 @@ History:
 """
 from __future__ import print_function
 import numpy as np
-from pyds.astro import astrounit as unit
+from . import astrounit as unit
 
 class bhscale:
     """
@@ -40,6 +40,7 @@ class bhscale:
         dist_cgs = self.dist_kpc*1e3*unit.pc
         unit_rad2mias = 180./np.pi*60.*60.*1e6    # rad to micro-arcsec
         self.rh_mias = self.rg*self.rh / dist_cgs * unit_rad2mias
+        self.rg_mias = self.rg / dist_cgs * unit_rad2mias
  
         self.risco = self.calc_risco()
         self.tg = self.calc_tg()
@@ -52,6 +53,7 @@ class bhscale:
         if (not silent):
             print('BH Params: Mbh=%e M_sun, spin=%f, Distance=%e kpc'%(self.mbh,self.spin,self.dist_kpc) )
             print('rg: %e cm'%self.rg)
+            print('rg_mias: %f micro-arcsec'%self.rg_mias)
             print('rh: %f rg'%self.rh)
             print('rh_mias: %f micro-arcsec'%self.rh_mias)
             print('risco: %f rg'%self.risco)
@@ -172,13 +174,14 @@ class bhscale:
             return Mdotedd/unit.msun*unit.year
 
         
-    def draw(self,rgmin=1., rgmax=1e3, log=True, silent=False, **keywords):
+    def draw(self,rgmin=1., rgmax=1e3, log=True, hline=None, **keywords):
         """
         Draw the scaled axes with given black hole parameters
 
         keywords -- rgmin: minimum of gravitational radius (default= 1.)
                     rgmax: maximum of gravitational radius (default= 1e3)
                     log: logarithmic scale of axes (default= True)
+                    hline: draw horizontal line in rg unit (default= None)
 
         **keywords -- out: if given, the plot will be saved to the designated output file (type = string) 
         """
@@ -187,21 +190,6 @@ class bhscale:
 
         dist_cgs = self.dist_kpc*1e3*unit.pc
         unit_rad2mias = 180./np.pi*60.*60.*1e6    # rad to micro-arcsec
-        self.rh_mias = self.rg*self.rh / dist_cgs * unit_rad2mias
- 
-        if (not silent):
-            print('BH Params: Mbh=%e M_sun, spin=%f, Distance=%e kpc'%(self.mbh,self.spin,self.dist_kpc) )
-            print('rg: %e cm'%self.rg)
-            print('rh: %f rg'%self.rh)
-            print('rh_mias: %f micro-arcsec'%self.rh_mias)
-            print('risco: %f rg'%self.risco)
-
-            if (self.cgs):
-                print('L_edd = %e erg s^-1'%self.Ledd)
-                print('Mdot_edd = %e g s^-1'%self.Mdotedd)
-            else:
-                print('L_edd = %e L_sun'%self.Ledd)
-                print('Mdot_edd = %e M_sun/year'%self.Mdotedd)
 
         # Setup a plot such that only the bottom spine is shown
         def setup(ax):
@@ -290,6 +278,16 @@ class bhscale:
         ax6.annotate("", xy=(1,self.risco),xytext=(-49.,self.risco),xycoords='data',textcoords='data' \
                     ,arrowprops=dict(arrowstyle="-",connectionstyle="arc3,rad=0.",color='purple'))
         ax1.annotate(r"r$_{\rm isco}$",(0.,self.risco*1.05),xycoords='data',color='purple')
+
+        # mark the request line and print the informations
+        print('horizontal line: %f (rg) = %f (mu-as) = %f (pc) = %f (au)'% \
+                (hline, hline*self.rg/dist_cgs*unit_rad2mias, \
+                 hline*self.rg/unit.pc, hline*self.rg/unit.au))
+        if not(hline is None):
+            ax6.annotate("", xy=(1,hline),xytext=(-49.,hline),xycoords='data',textcoords='data' \
+                        ,arrowprops=dict(arrowstyle="-",connectionstyle="arc3,rad=0.",color='blue'))
+ 
+
         
         # make an annotation for the black hole parameters
         ParamStr = r'M$_{\rm BH}$=%5.2e M$_{\odot}$, Distance=%5.2e kpc, spin=%4.2f'%(self.mbh, self.dist_kpc,self.spin)
