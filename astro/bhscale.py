@@ -280,10 +280,10 @@ class bhscale:
         ax1.annotate(r"r$_{\rm isco}$",(0.,self.risco*1.05),xycoords='data',color='purple')
 
         # mark the request line and print the informations
-        print('horizontal line: %f (rg) = %f (mu-as) = %f (pc) = %f (au)'% \
-                (hline, hline*self.rg/dist_cgs*unit_rad2mias, \
-                 hline*self.rg/unit.pc, hline*self.rg/unit.au))
         if not(hline is None):
+            print('horizontal line: %f (rg) = %f (mu-as) = %f (pc) = %f (au)'% \
+                    (hline, hline*self.rg/dist_cgs*unit_rad2mias, \
+                    hline*self.rg/unit.pc, hline*self.rg/unit.au))
             ax6.annotate("", xy=(1,hline),xytext=(-49.,hline),xycoords='data',textcoords='data' \
                         ,arrowprops=dict(arrowstyle="-",connectionstyle="arc3,rad=0.",color='blue'))
  
