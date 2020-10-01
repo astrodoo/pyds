@@ -22,12 +22,12 @@ def mtickexp(ax,axis='x',pointnum=1):
         ax: axis class
 
     keywords:
-        axis: indicator of x/y axis (string, default: 'x')
+        axis: indicator of x/y axis from the choice of 'x','y','both' (string, default: 'x')
         pointnum: the number of digits below the point (integer, default:1)
     """
 
 
-    fmt = r'%.'+str(pointnum)+'fx$10^{%i}$'
+    fmt = r'%.'+str(pointnum)+'f$\\times 10^{%i}$'
 
     def format_tick(x,pos=None):
         xstr_e = '%e'%x
@@ -41,7 +41,7 @@ def mtickexp(ax,axis='x',pointnum=1):
             xstr = '0'
         return xstr 
 
-    if (axis=='x'):
+    if (axis=='x' or axis=='both'):
         ax.xaxis.set_major_formatter(mtick.FuncFormatter(format_tick))
-    else:
+    if (axis=='y' or axis=='both'):
         ax.yaxis.set_major_formatter(mtick.FuncFormatter(format_tick))
