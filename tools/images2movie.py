@@ -38,7 +38,7 @@ def images2movie(filelist,dpi=100,interpolation='spline16',fps=24,movie_dpi=100,
     """
 
     # if ffmpeg is not in the global environment, the full directory should be set.
-    plt.rcParams['animation.ffmpeg_path'] = 'C:\\Users\\astrodoo\\ffmpeg-20190711-af9dc02-win64-static\\bin\\ffmpeg.exe'
+    #plt.rcParams['animation.ffmpeg_path'] = 'C:\\Users\\astrodoo\\ffmpeg-20190711-af9dc02-win64-static\\bin\\ffmpeg.exe'
 
     img = image.imread(filelist[0])
     height, width, depth = img.shape

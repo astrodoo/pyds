@@ -5,7 +5,7 @@ filename:
 PURPOSE:
      read the columns with formats from ascii data
 
-     ### Note that in current verion of python (2.7), nan cannot 
+     ### Note that in the verion of python (2.7), nan cannot 
      be managed in integer type (only work for float format). 
      Instead, it will produce weird number (i.e. -91212141412412)
 
@@ -22,7 +22,7 @@ History:
 import numpy as np
 import sys
 
-def readcol(file,format=[],nskip=0):
+def readcol(file,format=[],nskip=0, commentout='#'):
     """
     read the columns with formats from ascii data
     args:
@@ -45,9 +45,11 @@ def readcol(file,format=[],nskip=0):
 
     text = np.asarray(text)
 
-    # remove the empty lines
+    # remove the empty lines & commented out
     no_empty = np.ones(len(text),dtype=bool)
     no_empty[np.where((text=='\n') | (text==''))] = False
+    cmtout = [i for i,it in enumerate(text) if text[i][0]==commentout]
+    no_empty[cmtout] = False
     text = text[no_empty]
 
     nlines = np.str(len(text))
@@ -109,4 +111,5 @@ def readcol(file,format=[],nskip=0):
             exec(icolarr+"=selectdata[:,i]")
                 
     colarrstr = ', '.join(colarr)
+
     return eval(colarrstr)
