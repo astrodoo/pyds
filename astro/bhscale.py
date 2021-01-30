@@ -43,6 +43,7 @@ class bhscale:
         self.rg_mias = self.rg / dist_cgs * unit_rad2mias
  
         self.risco = self.calc_risco()
+        self.rph   = self.calc_rph()
         self.tg = self.calc_tg()
 
         self.Ledd = self.calc_Ledd(cgs=cgs)
@@ -57,6 +58,7 @@ class bhscale:
             print('rh: %f rg'%self.rh)
             print('rh_mias: %f micro-arcsec'%self.rh_mias)
             print('risco: %f rg'%self.risco)
+            print('rph: %f rg'%self.rph)
 
             if (cgs):
                 print('L_edd = %e erg s^-1'%self.Ledd)
@@ -105,6 +107,13 @@ class bhscale:
         
         return risco
 
+
+    def calc_rph(self):
+        """
+        calculate the photon-ring radius in rg unit
+        """
+        return 2.*( 1. + np.cos(2./3. * np.arccos(-self.spin)))
+ 
 
     def calc_torb(self, rr): 
         """
@@ -278,6 +287,10 @@ class bhscale:
         ax6.annotate("", xy=(1,self.risco),xytext=(-49.,self.risco),xycoords='data',textcoords='data' \
                     ,arrowprops=dict(arrowstyle="-",connectionstyle="arc3,rad=0.",color='purple'))
         ax1.annotate(r"r$_{\rm isco}$",(0.,self.risco*1.05),xycoords='data',color='purple')
+
+        ax6.annotate("", xy=(1,self.rph),xytext=(-49.,self.rph),xycoords='data',textcoords='data' \
+                    ,arrowprops=dict(arrowstyle="-",connectionstyle="arc3,rad=0.",color='navy'))
+        ax1.annotate(r"r$_{\rm ph}$",(0.,self.rph*1.05),xycoords='data',color='navy')
 
         # mark the request line and print the informations
         if not(hline is None):
