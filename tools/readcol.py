@@ -48,7 +48,8 @@ def readcol(file,format=[],nskip=0, commentout='#'):
     # remove the empty lines & commented out
     no_empty = np.ones(len(text),dtype=bool)
     no_empty[np.where((text=='\n') | (text==''))] = False
-    cmtout = [i for i,it in enumerate(text) if text[i][0]==commentout]
+    #cmtout = [i for i,it in enumerate(text) if it[0]==commentout]
+    cmtout = [i for i,it in enumerate(text) if it.startswith(commentout)]
     no_empty[cmtout] = False
     text = text[no_empty]
 
